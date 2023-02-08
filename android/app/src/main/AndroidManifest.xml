@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pontodaora_old">
    <application
-        android:label="pontodaora_old"
+        android:label="pontodaora"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
