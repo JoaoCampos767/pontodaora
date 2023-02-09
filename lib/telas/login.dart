@@ -15,8 +15,10 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    final formLogin = GlobalKey<FormState>();
     return Scaffold(
       body: Form(
+        key: formLogin,
         child: Container(
           decoration: const BoxDecoration(
             color: Colors.white,
@@ -38,7 +40,16 @@ class _LoginState extends State<Login> {
                         filled: true,
                         fillColor: Colors.white,
                       ),
-                      validator: (value) {},
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Campo Email é obrigatório";
+                        }
+
+                        if (!value.contains("@")) {
+                          return "Email é necessário conter @";
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Padding(
@@ -53,7 +64,12 @@ class _LoginState extends State<Login> {
                         filled: true,
                         fillColor: Colors.white,
                       ),
-                      validator: (value) {},
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Campo Senha é obrigatório";
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Padding(
@@ -61,12 +77,9 @@ class _LoginState extends State<Login> {
                         top: 20, bottom: 10, left: 100, right: 100),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Home(),
-                          ),
-                        );
+                        final isValid = formLogin.currentState?.validate();
+
+                        if (isValid!) {}
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 140, 0, 255),
