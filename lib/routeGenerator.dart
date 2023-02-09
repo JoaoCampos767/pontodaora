@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pontodaora_old/telas/cadastro.dart';
-import 'package:pontodaora_old/telas/home.dart';
-import 'package:pontodaora_old/telas/login.dart';
+import 'package:pontodaora/telas/cadastro.dart';
+import 'package:pontodaora/telas/home.dart';
+import 'package:pontodaora/telas/login.dart';
 
 class RouteGeneretor {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -25,6 +25,7 @@ class RouteGeneretor {
         defautl:
         _erroRota();
     }
+    return null;
   }
 
   static Route<dynamic> _erroRota() {

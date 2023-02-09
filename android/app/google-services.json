@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1032256224804",
+    "project_id": "pontodaora-d2da9",
+    "storage_bucket": "pontodaora-d2da9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032256224804:android:e282153c27e3f36388a2b1",
+        "android_client_info": {
+          "package_name": "com.example.pontodaora"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032256224804-10n4qgjf4hr55aos9vs6fodq8j6regb6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2lmakTTET3YcK0gARTcufKHubF-9wpT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032256224804-10n4qgjf4hr55aos9vs6fodq8j6regb6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:pontodaora/model/usuario.dart';
 
 class Cadastro extends StatefulWidget {
   const Cadastro({super.key});
@@ -9,6 +13,8 @@ class Cadastro extends StatefulWidget {
 }
 
 class _CadastroState extends State<Cadastro> {
+  String _mensagemErro = "";
+
   final TextEditingController _controllerNome = TextEditingController();
   final TextEditingController _controllerSobreNome = TextEditingController();
   final TextEditingController _controllerCPF = TextEditingController();
@@ -17,6 +23,47 @@ class _CadastroState extends State<Cadastro> {
 
   final maskCpf = MaskTextInputFormatter(
       mask: "###.###.###-##", filter: {"#": RegExp(r'[0-9]')});
+
+  _cadastrar() {
+    String nome = _controllerNome.text;
+    String sobrenome = _controllerSobreNome.text;
+    String cpf = _controllerCPF.text;
+    String email = _controllerEmail.text;
+    String senha = _controllerSenha.text;
+
+    Usuario usuario = Usuario();
+    usuario.nome = nome;
+    usuario.sobrenome = sobrenome;
+    usuario.cpf = cpf;
+    usuario.email = email;
+    usuario.senha = senha;
+
+    _cadastrarUsuario(usuario);
+  }
+
+  _cadastrarUsuario(Usuario usuario) async {
+    await Firebase.initializeApp();
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    auth
+        .createUserWithEmailAndPassword(
+            email: usuario.email, password: usuario.senha)
+        .then((firebaseUser) {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+
+      db
+          .collection("usuarios")
+          .doc(firebaseUser.user?.uid)
+          .set(usuario.toMap());
+
+      Navigator.pushNamedAndRemoveUntil(context, "/", (_) => false);
+    }).catchError((error) {
+      setState(() {
+        _mensagemErro =
+            "Erro ao cadastrar usuário, verifique os campos e tente novamente!";
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +207,13 @@ class _CadastroState extends State<Cadastro> {
                     padding: const EdgeInsets.only(
                         top: 16, bottom: 10, left: 100, right: 100),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        final isValid = formCadastro.currentState!.validate();
+
+                        if (isValid) {
+                          _cadastrar();
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 140, 0, 255),
                         padding: const EdgeInsets.fromLTRB(28, 12, 28, 12),

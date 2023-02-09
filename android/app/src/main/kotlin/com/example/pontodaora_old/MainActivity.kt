@@ -1,4 +1,4 @@
-package com.example.pontodaora_old
+package com.example.pontodaora
 
 import io.flutter.embedding.android.FlutterActivity
 

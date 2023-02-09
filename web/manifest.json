@@ -1,6 +1,6 @@
 {
-    "name": "pontodaora_old",
-    "short_name": "pontodaora_old",
+    "name": "pontodaora",
+    "short_name": "pontodaora",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

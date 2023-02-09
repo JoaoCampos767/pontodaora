@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pontodaora_old/telas/cadastro.dart';
-import 'package:pontodaora_old/telas/home.dart';
+import 'package:pontodaora/model/usuario.dart';
+
+import 'cadastro.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -12,6 +15,45 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerSenha = TextEditingController();
+
+  String _mensagemErro = "";
+
+  _logar() {
+    String email = _controllerEmail.text;
+    String senha = _controllerSenha.text;
+
+    Usuario usuario = Usuario();
+    usuario.email = email;
+    usuario.senha = senha;
+
+    _logarUsuario(usuario);
+  }
+
+  _logarUsuario(Usuario usuario) async {
+    await Firebase.initializeApp();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    auth
+        .signInWithEmailAndPassword(
+            email: usuario.email, password: usuario.senha)
+        .then((firebaseUser) {
+      Navigator.pushNamedAndRemoveUntil(context, "/home", (_) => false);
+    }).catchError((error) {
+      setState(() {
+        _mensagemErro = "Erro ao tentar logar";
+      });
+    });
+  }
+
+  _verificaUsuarioLogado() {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    User usuarioLogado = auth.currentUser!;
+
+    if (usuarioLogado != null) {
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamedAndRemoveUntil(context, "/home", (_) => false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +100,7 @@ class _LoginState extends State<Login> {
                     child: TextFormField(
                       controller: _controllerSenha,
                       keyboardType: TextInputType.text,
+                      obscureText: true,
                       style: const TextStyle(fontSize: 15),
                       decoration: const InputDecoration(
                         hintText: "Senha",
@@ -79,7 +122,11 @@ class _LoginState extends State<Login> {
                       onPressed: () {
                         final isValid = formLogin.currentState?.validate();
 
-                        if (isValid!) {}
+                        if (isValid!) {
+                          print("Validou corretamente...");
+
+                          _logar();
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 140, 0, 255),
@@ -94,12 +141,7 @@ class _LoginState extends State<Login> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Cadastro(),
-                          ),
-                        );
+                        Navigator.pushReplacementNamed(context, "/cadastro");
                       },
                       child: const Text(
                         "Clique aqui para se Cadastrar!",
