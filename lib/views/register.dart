@@ -3,16 +3,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:pontodaora/model/usuario.dart';
+import 'package:pontodaora/helpers/crypto_descrypto.dart';
+import 'package:pontodaora/model/login_user.dart';
+import 'package:pontodaora/routes/routeGenerator.dart';
 
-class Cadastro extends StatefulWidget {
-  const Cadastro({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<Cadastro> createState() => _CadastroState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _CadastroState extends State<Cadastro> {
+class _RegisterState extends State<Register> {
   String _mensagemErro = "";
 
   final TextEditingController _controllerNome = TextEditingController();
@@ -25,6 +27,8 @@ class _CadastroState extends State<Cadastro> {
       mask: "###.###.###-##", filter: {"#": RegExp(r'[0-9]')});
 
   _cadastrar() {
+    Crypto crypto = Crypto();
+
     String nome = _controllerNome.text;
     String sobrenome = _controllerSobreNome.text;
     String cpf = _controllerCPF.text;
@@ -36,7 +40,7 @@ class _CadastroState extends State<Cadastro> {
     usuario.sobrenome = sobrenome;
     usuario.cpf = cpf;
     usuario.email = email;
-    usuario.senha = senha;
+    usuario.senha = crypto.crypto(senha);
 
     _cadastrarUsuario(usuario);
   }
@@ -56,13 +60,18 @@ class _CadastroState extends State<Cadastro> {
           .doc(firebaseUser.user?.uid)
           .set(usuario.toMap());
 
-      Navigator.pushNamedAndRemoveUntil(context, "/", (_) => false);
-    }).catchError((error) {
-      setState(() {
-        _mensagemErro =
-            "Erro ao cadastrar usuário, verifique os campos e tente novamente!";
-      });
-    });
+      Navigator.pushNamedAndRemoveUntil(
+          context, RouteGeneretor.HOME, (_) => false);
+    }).catchError(
+      (error) {
+        setState(
+          () {
+            _mensagemErro =
+                "Erro ao cadastrar usuário, verifique os campos e tente novamente!";
+          },
+        );
+      },
+    );
   }
 
   @override

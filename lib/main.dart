@@ -1,6 +1,6 @@
-// @dart=2.9
 import 'package:flutter/material.dart';
-import 'package:pontodaora/telas/login.dart';
+import 'package:pontodaora/views/register.dart';
+import 'package:pontodaora/views/login.dart';
 
 void main() {
   runApp(

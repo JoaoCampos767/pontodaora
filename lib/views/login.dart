@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pontodaora/model/usuario.dart';
-
-import 'cadastro.dart';
+import 'package:pontodaora/helpers/crypto_descrypto.dart';
+import 'package:pontodaora/model/login_user.dart';
+import 'package:pontodaora/routes/routeGenerator.dart';
+import 'package:pontodaora/views/home.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -18,13 +19,23 @@ class _LoginState extends State<Login> {
 
   String _mensagemErro = "";
 
+  _updateMessage(String message) {
+    setState(
+      () {
+        _mensagemErro = message;
+      },
+    );
+  }
+
   _logar() {
+    Crypto crypto = Crypto();
+
     String email = _controllerEmail.text;
     String senha = _controllerSenha.text;
 
     Usuario usuario = Usuario();
     usuario.email = email;
-    usuario.senha = senha;
+    usuario.senha = crypto.crypto(senha);
 
     _logarUsuario(usuario);
   }
@@ -34,25 +45,19 @@ class _LoginState extends State<Login> {
     FirebaseAuth auth = FirebaseAuth.instance;
     auth
         .signInWithEmailAndPassword(
-            email: usuario.email, password: usuario.senha)
-        .then((firebaseUser) {
-      Navigator.pushNamedAndRemoveUntil(context, "/home", (_) => false);
-    }).catchError((error) {
-      setState(() {
-        _mensagemErro = "Erro ao tentar logar";
-      });
-    });
-  }
-
-  _verificaUsuarioLogado() {
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    User usuarioLogado = auth.currentUser!;
-
-    if (usuarioLogado != null) {
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamedAndRemoveUntil(context, "/home", (_) => false);
-    }
+      email: usuario.email,
+      password: usuario.senha,
+    )
+        .then(
+      (firebaseUser) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, RouteGeneretor.HOME, (_) => false);
+      },
+    ).catchError(
+      (error) {
+        _updateMessage("Erro ao tentar logar");
+      },
+    );
   }
 
   @override
@@ -123,8 +128,6 @@ class _LoginState extends State<Login> {
                         final isValid = formLogin.currentState?.validate();
 
                         if (isValid!) {
-                          print("Validou corretamente...");
-
                           _logar();
                         }
                       },
@@ -141,11 +144,15 @@ class _LoginState extends State<Login> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacementNamed(context, "/cadastro");
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, RouteGeneretor.REGISTER, (_) => false);
                       },
                       child: const Text(
                         "Clique aqui para se Cadastrar!",
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
