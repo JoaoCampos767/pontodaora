@@ -6,6 +6,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:pontodaora/helpers/crypto_descrypto.dart';
 import 'package:pontodaora/model/login_user.dart';
 import 'package:pontodaora/routes/routeGenerator.dart';
+import 'package:pontodaora/views/login.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -60,8 +61,12 @@ class _RegisterState extends State<Register> {
           .doc(firebaseUser.user?.uid)
           .set(usuario.toMap());
 
-      Navigator.pushNamedAndRemoveUntil(
-          context, RouteGeneretor.HOME, (_) => false);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Login(),
+        ),
+      );
     }).catchError(
       (error) {
         setState(

@@ -5,6 +5,7 @@ import 'package:pontodaora/helpers/crypto_descrypto.dart';
 import 'package:pontodaora/model/login_user.dart';
 import 'package:pontodaora/routes/routeGenerator.dart';
 import 'package:pontodaora/views/home.dart';
+import 'package:pontodaora/views/register.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -20,11 +21,9 @@ class _LoginState extends State<Login> {
   String _mensagemErro = "";
 
   _updateMessage(String message) {
-    setState(
-      () {
-        _mensagemErro = message;
-      },
-    );
+    setState(() {
+      _mensagemErro = message;
+    });
   }
 
   _logar() {
@@ -50,8 +49,12 @@ class _LoginState extends State<Login> {
     )
         .then(
       (firebaseUser) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, RouteGeneretor.HOME, (_) => false);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Home(),
+          ),
+        );
       },
     ).catchError(
       (error) {
@@ -144,8 +147,12 @@ class _LoginState extends State<Login> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, RouteGeneretor.REGISTER, (_) => false);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Register(),
+                          ),
+                        );
                       },
                       child: const Text(
                         "Clique aqui para se Cadastrar!",

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pontodaora/views/register.dart';
 import 'package:pontodaora/views/login.dart';
 
 void main() {

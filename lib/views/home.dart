@@ -8,6 +8,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  _baterPonto() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +36,9 @@ class _HomeState extends State<Home> {
                     child: const Text("Não"),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _baterPonto();
+                    },
                     child: const Text("Sim"),
                   ),
                 ],
